@@ -3,10 +3,13 @@ var mainState = {
     preload: function() {
         // Here we preload the assets
         game.load.image('paddle', 'assets/paddle.png');
+        game.load.image('brick', 'assets/brick.png')
     },
     
     create: function() {
         // Here we create the game
+        
+        /* Setup */
         
         // Set the background colour to blue
         game.stage.backgroundColor = '#3598db';
@@ -17,6 +20,9 @@ var mainState = {
         // Add the physics engine to all the game objects
         game.world.enableBody = true;
         
+        
+        /* Paddle */
+        
         // Create the left/right arrow keys
         this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -26,6 +32,26 @@ var mainState = {
         
         // Make sure the paddle won't move when it hits the ball
         this.paddle.body.immovable = true;
+        
+        /* Bricks */
+        
+        // Create a group the will contain all the bricks
+        this.bricks = game.add.group();
+        
+        // Add 25 bricks to the group (5 columns and 5 lines)
+        for (var i = 0; i < 5; i++) {
+            for (var j = 0; j < 5; j++) {
+                // Create the brick at the correct position
+                var brick = game.add.sprite(55+i*60, 55+j*35, 'brick');
+                
+                // Make sure the brick won't move when the ball hits it
+                brick.body.immovable =true;
+                
+                // Add the brick to the group
+                this.bricks.add(brick);
+            }
+        }
+        
     },
     
     update: function() {
