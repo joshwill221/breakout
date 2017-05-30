@@ -4,6 +4,7 @@ var mainState = {
         // Here we preload the assets
         game.load.image('paddle', 'assets/paddle.png');
         game.load.image('brick', 'assets/brick.png')
+        game.load.image('ball', 'assets/ball.png');
     },
     
     create: function() {
@@ -33,6 +34,7 @@ var mainState = {
         // Make sure the paddle won't move when it hits the ball
         this.paddle.body.immovable = true;
         
+        
         /* Bricks */
         
         // Create a group the will contain all the bricks
@@ -52,10 +54,26 @@ var mainState = {
             }
         }
         
+        
+        /* Ball */
+        
+        // Add the ball
+        this.ball = game.add.sprite(200, 300, 'ball');
+        
+        // Give the ball some initial speed
+        this.ball.body.velocity.x = 200;
+        this.ball.body.velocity.y = 200;
+        
+        // Make sure the ball will bounce when hitting something
+        this.ball.body.bounce.setTo(true);
+        this.ball.body.collideWorldBounds = true;     
     },
     
     update: function() {
         // Here we update the game 60 times per second
+        
+        
+        /* Controls */
         
         // Move the paddle left/right when an arrow key is pressed
         if (this.left.isDown) 
@@ -66,7 +84,23 @@ var mainState = {
             // Stop the paddle when no key is pressed;
             this.paddle.body.velocity.x = 0;
         
+        
+        /* Collisions */
+        
+        // Add collisions between the paddle and the ball
+        game.physics.arcade.collide(this.paddle, this.ball);
+        
+        // Call the 'hit' function when the ball hits a brick
+        game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
+        
+        // Restart the game if the ball is below the paddle
+        if (this.ball.y > this.paddle.y)
+            game.state.start('main');        
     },
+    
+    hit: function(ball, brick) {
+        brick.kill();
+    }
 };
 
 // Initialise the game and start out state
