@@ -34,6 +34,9 @@ var mainState = {
         // Make sure the paddle won't move when it hits the ball
         this.paddle.body.immovable = true;
         
+        // Make sure paddle stays on screen
+        this.paddle.body.collideWorldBounds = true;
+        
         
         /* Bricks */
         
@@ -58,14 +61,14 @@ var mainState = {
         /* Ball */
         
         // Add the ball
-        this.ball = game.add.sprite(200, 300, 'ball');
+        this.ball = game.add.sprite(100, 300, 'ball');
         
         // Give the ball some initial speed
         this.ball.body.velocity.x = 200;
         this.ball.body.velocity.y = 200;
         
         // Make sure the ball will bounce when hitting something
-        this.ball.body.bounce.setTo(true);
+        this.ball.body.bounce.setTo(1.005);
         this.ball.body.collideWorldBounds = true;     
     },
     
@@ -90,17 +93,24 @@ var mainState = {
         // Add collisions between the paddle and the ball
         game.physics.arcade.collide(this.paddle, this.ball);
         
-        // Call the 'hit' function when the ball hits a brick
-        game.physics.arcade.collide(this.ball, this.bricks, this.hit, null, this);
+        // Call the 'paddleHit' function when the ball hits the paddle
+        //game.physics.arcade.collide(this.ball, this.paddle, this.paddleHit, null, this);
+        
+        // Call the 'brickHit' function when the ball hits a brick
+        game.physics.arcade.collide(this.ball, this.bricks, this.brickHit, null, this);
         
         // Restart the game if the ball is below the paddle
         if (this.ball.y > this.paddle.y)
             game.state.start('main');        
     },
     
-    hit: function(ball, brick) {
+    brickHit: function(ball, brick) {
         brick.kill();
-    }
+    },
+    
+    //paddleHit: function(ball, brick) {
+    //    this.ball.body.velocity.x += 10000;
+    //}
 };
 
 // Initialise the game and start out state
