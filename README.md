@@ -1,5 +1,5 @@
-### The 2D Game Breakout In Phaser A JavaScript Framework.
+# A Basic Clone of The 2D Game Breakout In Phaser A HTML5 Framework.
 
-By Josh Williams
+[Play it here!](https://joshwill221.github.io/breakout/)
 
 [Tutorial](http://www.lessmilk.com/tutorial/breakout-phaser)
